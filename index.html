@@ -490,14 +490,14 @@ function render() {
   const q = state.query.trim();
   const numericOnly = isNumericQuery(q);
   const nums = numericOnly ? parseNumbers(q) : [];
-  const singleLongNumber = numericOnly && nums.length === 1 && /^\d{4,}$/.test(q.trim());
-  const modelLike = q && (!numericOnly || /[A-Za-z-]/.test(q) || singleLongNumber);
+  const singleNumberNoDecimal = numericOnly && nums.length === 1 && !/\./.test(q.trim());
+  const modelLike = q && (!numericOnly || /[A-Za-z-]/.test(q) || singleNumberNoDecimal);
   let items = [];
   let hint = "";
   if (modelLike) {
     const r = searchModel(q);
     items = r.items;
-    if (singleLongNumber && items.length) {
+    if (singleNumberNoDecimal && items.length) {
       hint = "按型号片段 " + q.trim() + " 匹配";
     } else if (!items.length && nums.length) {
       const ball = nums[0];
